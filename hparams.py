@@ -29,7 +29,7 @@ hparams = HParams(
     # waveform domain scaling
     global_gain_scale=1.0,
 
-    sample_rate=36000,
+    sample_rate=22500,
     # this is only valid for mulaw is True
     silence_threshold=2,
     num_mels=80,
@@ -37,7 +37,7 @@ hparams = HParams(
     fmax=7600,
     fft_size=1024,
     # shift can be specified by either hop_size or frame_shift_ms
-    hop_size=450,
+    hop_size=256,
     frame_shift_ms=None,
     win_length=1024,
     win_length_ms=-1.0,
@@ -72,7 +72,7 @@ hparams = HParams(
     upsample_conditional_features=True,
     upsample_net="ConvInUpsampleNetwork",
     upsample_params={
-        "upsample_scales": [2, 3, 3, 5, 5],  # should np.prod(upsample_scales) == hop_size
+        "upsample_scales": [4, 4, 4, 4],  # should np.prod(upsample_scales) == hop_size
     },
 
     # Global conditioning (set negative value to disable)
