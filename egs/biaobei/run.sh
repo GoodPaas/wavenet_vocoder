@@ -25,7 +25,7 @@ stop_stage=0
 
 # Hyper parameters (.json)
 # **CHANGE** here to your own hparams
-hparams=conf/gaussian_wavenet.json
+hparams=conf/biaobei.json
 
 # Batch size at inference time.
 inference_batch_size=32
