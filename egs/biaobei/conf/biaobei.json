@@ -4,7 +4,7 @@
   "quantize_channels": 65536,
   "preprocess": "preemphasis",
   "postprocess": "inv_preemphasis",
-  "global_gain_scale": 0.55,
+  "global_gain_scale": 1.0,
   "sample_rate": 36000,
   "silence_threshold": 2,
   "num_mels": 80,
@@ -16,7 +16,7 @@
   "win_length": 1024,
   "win_length_ms": -1.0,
   "window": "hann",
-  "highpass_cutoff": 70.0,
+  "highpass_cutoff": 0.0,
   "output_distribution": "Logistic",
   "log_scale_min": -16.0,
   "out_channels": 30,
@@ -63,8 +63,8 @@
   "max_time_steps": 10240,
   "exponential_moving_average": true,
   "ema_decay": 0.9999,
-  "checkpoint_interval": 2500,
-  "train_eval_interval": 10000,
+  "checkpoint_interval": 100000,
+  "train_eval_interval": 100000,
   "test_eval_epoch_interval": 50,
   "save_optimizer_state": true
 }

@@ -24,12 +24,12 @@ hparams = HParams(
     # time-domain pre/post-processing
     # e.g., preemphasis/inv_preemphasis
     # ref: LPCNet https://arxiv.org/abs/1810.11846
-    preprocess="",
-    postprocess="",
+    preprocess="preemphasis",
+    postprocess="inv_preemphasis",
     # waveform domain scaling
     global_gain_scale=1.0,
 
-    sample_rate=22500,
+    sample_rate=36000,
     # this is only valid for mulaw is True
     silence_threshold=2,
     num_mels=80,
@@ -37,14 +37,14 @@ hparams = HParams(
     fmax=7600,
     fft_size=1024,
     # shift can be specified by either hop_size or frame_shift_ms
-    hop_size=256,
+    hop_size=450,
     frame_shift_ms=None,
     win_length=1024,
     win_length_ms=-1.0,
     window="hann",
 
     # DC removal
-    highpass_cutoff=70.0,
+    highpass_cutoff=0.0,
 
     # Parametric output distribution type for scalar input
     # 1) Logistic or 2) Normal
@@ -56,7 +56,7 @@ hparams = HParams(
     # otherwise num_mixture * 3 (pi, mean, log_scale)
     # single mixture case: 2
     out_channels=10 * 3,
-    layers=24,
+    layers=28,
     stacks=4,
     residual_channels=128,
     gate_channels=256,  # split into 2 gropus internally for gated activation
@@ -72,7 +72,7 @@ hparams = HParams(
     upsample_conditional_features=True,
     upsample_net="ConvInUpsampleNetwork",
     upsample_params={
-        "upsample_scales": [4, 4, 4, 4],  # should np.prod(upsample_scales) == hop_size
+        "upsample_scales": [2, 3, 3, 5, 5],  # should np.prod(upsample_scales) == hop_size
     },
 
     # Global conditioning (set negative value to disable)
