@@ -88,7 +88,7 @@ hparams = HParams(
     # Loss
 
     # Training:
-    batch_size=8,
+    batch_size=10,
     optimizer="Adam",
     optimizer_params={
         "lr": 1e-3,
