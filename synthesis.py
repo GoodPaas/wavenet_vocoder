@@ -33,6 +33,11 @@ from hparams import hparams
 
 from train import to_categorical
 
+from nnmnkwii.datasets import FileSourceDataset, FileDataSource
+from torch.utils import data as data_utils
+from evaluate import dummy_collate, to_int16
+from torch.nn import functional as F
+from scipy.io import wavfile
 
 torch.set_num_threads(4)
 use_cuda = torch.cuda.is_available()
@@ -188,6 +193,16 @@ def wavegen(model, length=None, c=None, g=None, initial_value=None,
 
     return y_hat
 
+class SingleFileDataSource(FileDataSource):
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+    def collect_files(self):
+        paths = []
+        paths.append(self.file_path)
+
+    def collect_features(self, path):
+        return np.load(self.file_path)
 
 if __name__ == "__main__":
     args = docopt(__doc__)
@@ -239,11 +254,36 @@ if __name__ == "__main__":
     os.makedirs(dst_dir, exist_ok=True)
     dst_wav_path = join(dst_dir, "{}{}.wav".format(checkpoint_name, file_name_suffix))
 
-    # DO generate
-    waveform = batch_wavegen(model, length, c=c, g=speaker_id, initial_value=initial_value, fast=True)
+    # Prepare mel spectrogram condition
+    C = FileSourceDataset(SingleFileDataSource(conditional_path))
+    data_loader = data_utils.DataLoader(C, batch_size=hparams.batch_size, drop_last=False,
+        num_workers=hparams.num_workers, sampler=None, shuffle=False,
+        collate_fn=dummy_collate, pin_memory=hparams.pin_memory)
 
-    # save
-    librosa.output.write_wav(dst_wav_path, waveform, sr=hparams.sample_rate)
+    cin_pad = hparams.cin_pad
+
+    for idx, (x, y, c, g, input_lengths) in enumerate(data_loader):
+        if cin_pad > 0:
+            c = F.pad(c, pad=(cin_pad, cin_pad), mode="replicate")
+
+        # B x 1 x T
+        if x[0] is not None:
+            B, _, T = x.shape
+        else:
+            B, _, Tn = c.shape
+            T = Tn * audio.get_hop_size()
+
+        # DO generate
+        y_hats = batch_wavegen(model, c=c, g=g, fast=True, tqdm=tqdm)
+
+        for i, (ref, gen, length) in enumerate(zip(x, y_hats, input_lengths)):
+            gen = gen[:length]
+            gen = np.clip(gen, -1.0, 1.0)
+
+            # save
+            wavfile.write(dst_wav_path, hparams.sample_rate, to_int16(gen))
 
     print("Finished! Check out {} for generated audio samples.".format(dst_dir))
     sys.exit(0)
+
+
