@@ -252,7 +252,9 @@ if __name__ == "__main__":
     checkpoint_name = splitext(basename(checkpoint_path))[0]
 
     os.makedirs(dst_dir, exist_ok=True)
-    dst_wav_path = join(dst_dir, "{}{}.wav".format(checkpoint_name, file_name_suffix))
+    if not file_name_suffix:
+        file_name_suffix = splitext(basename(conditional_path))[0]
+    dst_wav_path = join(dst_dir, "{}.wav".format(file_name_suffix))
 
     # Prepare mel spectrogram condition
     C = FileSourceDataset(SingleFileDataSource(conditional_path))
