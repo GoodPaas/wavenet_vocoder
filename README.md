@@ -1,3 +1,29 @@
+## **预训练模型下载**
+
+(实验中)
+
+## **环境要求**
+
+- Python 3
+- CUDA >= 8.0
+- PyTorch >= v0.4.0
+
+## **安装**
+
+```Shell
+pip install -e .
+```
+
+## **从 Mel 频谱合成音频**
+
+```Shell
+python synthesis.py '{你的模型文件}.pth' '{输出音频目录}' --conditional='{Mel 频谱文件}.npy'
+```
+
+&nbsp;
+
+&nbsp;
+
 # WaveNet vocoder
 
 [![PyPI](https://img.shields.io/pypi/v/wavenet_vocoder.svg)](https://pypi.python.org/pypi/wavenet_vocoder)
