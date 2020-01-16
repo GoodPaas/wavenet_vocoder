@@ -1,6 +1,6 @@
 ## **预训练模型下载**
 
-(实验中)
+[下载地址](https://github.com/JasonWei512/wavenet_vocoder/releases/download/Biaobei_WaveNet-200116/checkpoint_biaobei-36Khz.zip)（用于 [JasonWei512/Tacotron-2-Chinese](https://github.com/JasonWei512/Tacotron-2-Chinese)）
 
 ## **环境要求**
 
