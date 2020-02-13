@@ -13,6 +13,7 @@ options:
     --file-name-suffix=<s>            File name suffix [default: ].
     --speaker-id=<id>                 Speaker ID (for multi-speaker model).
     --output-html                     Output html for blog post.
+    --force-cpu                       Force CPU synthesis mode.
     -h, --help               Show help message.
 """
 from docopt import docopt
@@ -220,6 +221,11 @@ if __name__ == "__main__":
     speaker_id = args["--speaker-id"]
     speaker_id = None if speaker_id is None else int(speaker_id)
     preset = args["--preset"]
+
+    # Force CPU synthesis mode if required
+    if args["--force-cpu"]:
+        use_cuda = False
+        device = torch.device("cpu")
 
     # Load preset if specified
     if preset is not None:
